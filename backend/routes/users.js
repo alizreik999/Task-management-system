@@ -11,7 +11,7 @@ const{
 const router = express.Router()
 
 // login route
-routgiter.post('/login', loginUser)
+router.post('/login', loginUser)
 
 //signup route 
 router.post('/signup', signupUser)
