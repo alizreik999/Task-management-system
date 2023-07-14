@@ -21,16 +21,25 @@ const getUser = async(req, res) => {
 }
 
 //create new user
-const createUser = async(req, res) => {
-    const{username, email, status, password, role} = req.body
+// const createUser = async(req, res) => {
+//     const{username, email, status, password, role} = req.body
 
-    //add doc to db
-    try{
-        const user = await User.create({username, email, status, password, role})
-        res.status(200).json(user)
-    }catch(error){res.status(400).json({error: error.message})}
+//     //add doc to db
+//     try{
+//         const user = await User.create({username, email, status, password, role})
+//         res.status(200).json(user)
+//     }catch(error){res.status(400).json({error: error.message})}
 
 
+// }
+
+//login user
+const loginUser = async (req, res) => {
+    res.json({mssg: 'login user'})
+}
+//signup user
+const signupUser = async (req, res) => {
+    res.json({mssg: 'signup user'})
 }
 
 //delete a task
@@ -66,7 +75,9 @@ const updateUser  = async(req, res) => {
 module.exports = {
     getUsers,
     getUser,
-    createUser,
+    // createUser,
     deleteUser,
-    updateUser
+    updateUser,
+    signupUser,
+    loginUser
 }
