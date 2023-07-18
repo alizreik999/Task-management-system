@@ -1,10 +1,20 @@
+const asyncHandler = require('express-async-handler')
 const User = require('../models/userModel')
 const mongoose = require('mongoose')
 const jwt = require('jsonwebtoken')
 
-const createToken = (_id) => {
-    return jwt.sign({_id}, process.env.SECRET, {expiresIn: '1d'})
-}
+
+const createToken = (res, _id) => {
+    const token =  jwt.sign({_id}, process.env.SECRET, {expiresIn: '1d'})
+    res.cookie('jwt',token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV !== 'development',
+        sameSite: 'strict',
+        maxAge: 24 *60 *60 *1000
+       })
+ }
+ 
+  
 //get all tasks
 const getUsers = async (req, res) => {
     const users = await User.find({})
@@ -45,7 +55,7 @@ const loginUser = async (req, res) => {
     try{
         const user = await User.login(email, password)
         //create token
-        const token = createToken(user._id)
+        const token = createToken(res,user._id)
         res.status(200).json({email,token})
     }catch(error){
         res.status(400).json({error: error.message})
@@ -59,8 +69,8 @@ const signupUser = async (req, res) => {
 
     try{
         const user = await User.signup(username,email, password,status,role)
-        //create toke
-        const token = createToken(user._id)
+        //create token
+        const token = createToken(res,user._id)
         res.status(200).json({username,email,token,status,role})
     }catch(error){
         res.status(400).json({error: error.message})
@@ -68,7 +78,18 @@ const signupUser = async (req, res) => {
     // res.json({mssg: 'signup user'})
 }
 
-//delete a task
+//logout user
+
+const logoutUser = asyncHandler(async(req, res) => {
+   res.cookie('jwt','', {
+    httpOnly:true,
+    expires: new Date(0)
+   }) 
+    
+    res.status(200).json({message: 'Logout User'})
+})
+
+//delete a user
 const deleteUser = async(req, res) => {
     const { id } = req.params
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -81,7 +102,7 @@ const deleteUser = async(req, res) => {
     res.status(200).json(user)
 }
 
-//update a task
+//update a user
 const updateUser  = async(req, res) => {
     const { id } = req.params
     if(!mongoose.Types.ObjectId.isValid(id)){
@@ -105,5 +126,6 @@ module.exports = {
     deleteUser,
     updateUser,
     signupUser,
-    loginUser
-}
+    loginUser,
+    logoutUser
+}  

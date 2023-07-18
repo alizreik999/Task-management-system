@@ -1,3 +1,10 @@
 #task management system
 npm install
-make sure to gitignore packages and node_modules before you push anything to github
+npm i express-async-handler
+npm install bcrypt
+npm install cookie-parser
+npm install validator
+npm install jsonwebtoken
+npm install joi
+npm install mongoose
+make sure to gitignore node_modules and .env file before you push anything to github

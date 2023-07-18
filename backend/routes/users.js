@@ -6,8 +6,10 @@ const{
     deleteUser,
     updateUser,
     signupUser,
-    loginUser
+    loginUser,
+    logoutUser
 } = require('../controllers/userController')
+const {protect} = require('../middleware/authMiddleware.js')
 const router = express.Router()
 
 // login route
@@ -16,13 +18,17 @@ router.post('/login', loginUser)
 //signup route 
 router.post('/signup', signupUser)
 
+//logout user
+
+router.post('/logout', logoutUser)
+
 
 //GET all users
 router.get('/',getUsers)
 
 
 //GET a single user
-router.get('/:id',getUser)
+router.get('/:id',protect,getUser)
 
 //POST a new task
 
@@ -31,6 +37,6 @@ router.get('/:id',getUser)
 //DELETE a user 
 router.delete('/:id',deleteUser)
 //UPDATE a user
-router.patch('/:id',updateUser)
+router.patch('/:id',protect,updateUser)
 
 module.exports = router
