@@ -1,11 +1,12 @@
 require('dotenv').config()
-
+const cookieParser = require('cookie-parser')
 const express = require('express')
 const mongoose = require('mongoose')
 const taskRoutes = require('./routes/tasks')
 const userRoutes = require('./routes/users')
 const projectRoutes = require('./routes/projects')
 const projectmemberRoutes = require('./routes/projectmember')
+
 
 //express app
 const app = express()
@@ -16,6 +17,7 @@ app.use((req, res, next) => {
     console.log(req.path, req.method)
     next()
 })
+app.use(cookieParser())
 //routes
 app.use('/api/tasks',taskRoutes)
 app.use('/api/users',userRoutes)
