@@ -21,15 +21,33 @@ const getUser = async(req, res) => {
 }
 
 //create new user
-const createUser = async(req, res) => {
-    const{username, email, status, password, role} = req.body
+// const createUser = async(req, res) => {
+//     const{username, email, status, password, role} = req.body
 
-    //add doc to db
-    try{
-        const user = await User.create({username, email, status, password, role})
-        res.status(200).json(user)
-    }catch(error){res.status(400).json({error: error.message})}
+//     //add doc to db
+//     try{
+//         const user = await User.create({username, email, status, password, role})
+//         res.status(200).json(user)
+//     }catch(error){res.status(400).json({error: error.message})}
 
+
+// }
+
+//login user
+const loginUser=async (req,res)=>{
+    res.json({mssg:'login user'})
+
+}
+//signup user
+const signupUser=async (req,res)=>{
+    const {username,email,password,status,role}=req.body
+    try{    
+        const user=await User.signup(username,email,password,role,status)
+        res.status(200).json({username,email,user,role,status})
+        
+    }catch(error){
+        res.status(400).json({error:error.message})
+    }
 
 }
 
@@ -50,7 +68,7 @@ const deleteUser = async(req, res) => {
 const updateUser  = async(req, res) => {
     const { id } = req.params
     if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({error: ' No such Projectmember'})
+        return res.status(404).json({error: ' No such user'})
     }
     const user = await User.findOneAndUpdate({_id:id}, {
         ...req.body
@@ -66,7 +84,8 @@ const updateUser  = async(req, res) => {
 module.exports = {
     getUsers,
     getUser,
-    createUser,
+    loginUser,
+    signupUser,
     deleteUser,
     updateUser
 }
